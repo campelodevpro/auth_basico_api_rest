@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function login(Request $request)
     {
         $user = User::where('email', $request->get('email'))->first();
 
@@ -18,5 +18,12 @@ class LoginController extends Controller
             'access_token' => $user->createToken($user->name.$user->created_at)->plainTextToken
         ];
         
+    }
+
+    public function logout()
+    {
+        $user = auth()->user();
+
+        $user->tokens()->delete();
     }
 }
